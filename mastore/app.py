@@ -35,6 +35,20 @@ class Item(Resource):
         items.append(item)
         return response, 201
 
+
+    def delete(self, name):
+        global items
+        items = [x for x in items if x['name']!=name]
+        return {'message': 'Item deleted'}
+
+
+class ItemList(Resource):
+
+    def get(self):
+        return {'items': items}
+
 api.add_resource(Item, '/item/<name>') # name as param in methods at this endpoint
+api.add_resource(ItemList, '/itemlist')
+
 
 app.run(port=5000, debug=True)
