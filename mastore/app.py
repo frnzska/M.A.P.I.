@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request
-from flask_restful import Resource, Api # enforce REST principles
+from flask_restful import Resource, Api, reqparse # enforce REST principles
 from flask_jwt import JWT, jwt_required
 from mastore.security import authenticate, identity
 
@@ -18,6 +18,8 @@ api = Api(app)
 items = []
 
 class Item(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('some_payload_field')
 
     @jwt_required() # first login, via auth endpoint
     def get(self, name):
@@ -27,13 +29,28 @@ class Item(Resource):
 
     def post(self, name):
         #eg.  server/item/fancy_hat -> post(name=fancy_hat)
-        data = request.get_json() # get request body, payload
-        item = {'name': name, 'some_payload_field': data['example_field']}
-        response = {'item': item}
+        #some_payload_field = request.get_json() # get request body, payload
+
         if next(filter(lambda i: i['name'] == name, items), None):
-            return response, 400
+            return {'message': f'Item with name {name} already exists.'}, 400
+
+        payload = self.parser.parse_args()
+        item = {'name': name, **payload}
+        response = {'item': item}
         items.append(item)
         return response, 201
+
+
+    def put(self, name):
+        payload = self.parser.parse_args()
+        item = next(filter(lambda i: i['name'] == name, items), None)
+        if item:
+            item.update({'name': name, **payload})
+        else:
+            item = {'name': name, **payload}
+            items.append(item)
+        return item, 201
+
 
 
     def delete(self, name):
