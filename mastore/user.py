@@ -23,6 +23,16 @@ class User:
         return user
 
 
-
+    def find_by_id(cls, id):
+        user = None
+        con = sqlite3.connect('data.db')
+        cursor = con.cursor()
+        query = 'SELECT * FROM users WHERE id=?'
+        results = cursor.execute(query, (id,))
+        row = results.fetchone()
+        con.close()
+        if row:
+             user = cls(*row)
+        return user
 
 
