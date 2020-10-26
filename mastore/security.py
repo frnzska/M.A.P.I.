@@ -1,21 +1,16 @@
 from werkzeug.security import safe_str_cmp
 from mastore.user import User
 
-#todo
-users = [User(1, 'cate', '1234')]
 
 
-# helper dicts to speed up search
-username_mapping ={u.username: u for u in users}
-userid_mapping ={u.id: u for u in users}
 
-def authenticate(username, password):
-    user = username_mapping.get(username, None)
+def authenticate(email, password):
+    user = User.find_by_email(email)
     if user and safe_str_cmp(password, user.password):
         return user
 
 
-def identity(payload):
+def identity(payload): # id stored in JWD
     user_id = payload['identity']
-    return userid_mapping.get(user_id, None)
+    return {"user_id": 1}#User.find_by_id(user_id)
 
