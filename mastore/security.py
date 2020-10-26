@@ -12,5 +12,5 @@ def authenticate(email, password):
 
 def identity(payload): # id stored in JWD
     user_id = payload['identity']
-    return {"user_id": 1}#User.find_by_id(user_id)
+    return User.find_by_id(user_id)
 

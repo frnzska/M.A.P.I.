@@ -34,7 +34,6 @@ class User:
         con.close()
         if row:
              user = cls(*row)
-        print(user)
         return user
 
     def find_by_email(cls, email):
@@ -42,7 +41,7 @@ class User:
         con = sqlite3.connect('data.db')
         cursor = con.cursor()
         query = 'SELECT * FROM users WHERE email=?'
-        results = cursor.execute(query, (id,))
+        results = cursor.execute(query, (email,))
         row = results.fetchone()
         con.close()
         if row:

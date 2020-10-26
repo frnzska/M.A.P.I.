@@ -35,7 +35,7 @@ class Item(Resource):
         return {'item': item}, 200 if item else 404 # return valid json representation
 
 
-    #@jwt_required()
+    @jwt_required()
     def post(self, name):
         #eg.  server/item/fancy_hat -> post(name=fancy_hat)
         #some_payload_field = request.get_json() # get request body, payload
@@ -49,7 +49,7 @@ class Item(Resource):
         return response, 201
 
 
-    #@jwt_required()
+    @jwt_required()
     def put(self, name):
         payload = self.parser.parse_args()
         new_item = {'name': name, 'some_payload_field': payload['some_payload_field']}
@@ -68,7 +68,7 @@ class Item(Resource):
         connection.close()
         return new_item, 201
 
-
+    @jwt_required()
     def delete(self, name):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -81,6 +81,7 @@ class Item(Resource):
 
 class ItemList(Resource):
 
+    @jwt_required()
     def get(self):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
