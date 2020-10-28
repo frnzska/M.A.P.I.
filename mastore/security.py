@@ -10,7 +10,7 @@ def authenticate(email, password):
         return user
 
 
-def identity(payload): # id stored in JWD
+def identity(payload):# id stored in JWD
     user_id = payload['identity']
     return User.find_by_id(user_id)
 
