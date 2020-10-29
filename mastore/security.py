@@ -1,5 +1,5 @@
 from werkzeug.security import safe_str_cmp
-from mastore.user import User
+from mastore.resources.user import User
 
 
 
@@ -13,4 +13,3 @@ def authenticate(email, password):
 def identity(payload):# id stored in JWD
     user_id = payload['identity']
     return User.find_by_id(user_id)
-

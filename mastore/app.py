@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, render_template, request
-from flask_restful import Resource, Api, reqparse # enforce REST principles
+from flask import Flask
+from flask_restful import Api  # enforce REST principles
 from flask_jwt import JWT
 from mastore.security import authenticate, identity
-from mastore.item import Item, ItemList
+from mastore.resources.item import Item, ItemList
 import datetime
 
 

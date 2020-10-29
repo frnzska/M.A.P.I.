@@ -1,8 +1,8 @@
 import functools
 import sqlite3
 
-class User:
-
+class UserModel():
+    __tablename__ = 'users'
 
     def __init__(self, id, email, password):
         self.id = id
@@ -35,5 +35,3 @@ class User:
         if row:
              user = cls(*row)
         return user
-
-
