@@ -11,35 +11,33 @@ class Item(Resource):
     @jwt_required() # first login, via auth endpoint, in header Authorisation: JWT keykeykey..
     def get(self, name):
         item = ItemModel.find_by_name(name)
-        return {'item': item}, 200 if item else 404 # return valid json representation
+        return item.json(), 200 if item else 404 # return valid json representation
 
 
     @jwt_required()
     def post(self, name):
         #eg.  server/item/fancy_hat -> post(name=fancy_hat)
         #price = request.get_json() # get request body, payload
-        item = self.find_by_name(name)
+        item = ItemModel.find_by_name(name)
         if item:
             return {'message': f'Item with name {name} already exists.'}, 400
         payload = self.parser.parse_args()
-        item = {'name': name, 'price': payload['price']}
+        item = ItemModel(name, payload['price'])
         item.insert()
-        response = {'item': item}
-        return response, 201
+        return item.json(), 201
 
 
     @jwt_required()
     def put(self, name):
         payload = self.parser.parse_args()
-        new_item = {'name': name, 'price': payload['price']}
+        new_item = ItemModel(name=name, price=payload['price'])
         item = ItemModel.find_by_name(name)
         if not item:
             new_item.insert()
             return {'message': f'Item with name {name} created.'}, 200
 
-        #Todo
-            new_item.update()
-        return new_item, 201
+        new_item.update()
+        return new_item.json(), 201
 
     @jwt_required()
     def delete(self, name):

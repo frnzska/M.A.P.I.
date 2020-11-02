@@ -19,13 +19,12 @@ class ItemModel():
         result = cursor.execute(query, (name,))
         row = result.fetchone()
         conn.close()
-        return row
+        return cls(*row) if row else None
 
 
     def insert(self):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
-        payload = self.parser.parse_args()
         query = 'INSERT INTO items VALUES(?, ?)'
         cursor.execute(query, (self.name, self.price))
         conn.commit()
