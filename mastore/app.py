@@ -1,13 +1,20 @@
+import datetime
 from flask import Flask
 from flask_restful import Api  # enforce REST principles
 from flask_jwt import JWT
+
 from mastore.security import authenticate, identity
 from mastore.resources.item import Item, ItemList
-import datetime
+from mastore.resources.user import UserRegister
+
 
 
 app = Flask(__name__)
 app.secret_key = 'test' # for jwt exchange token
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # turns of flask sqlchemy modificatinon tracker, sql aclchemy tracker is there
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=365) # change config before creating JWT instance
 app.config['JWT_AUTH_URL_RULE'] = '/login' # default is '/auth'
@@ -21,6 +28,9 @@ jwt = JWT(app, authenticate, identity) # creates endpoint  and checks via authen
 api = Api(app)
 api.add_resource(Item, '/item/<name>') # name as param in methods at this endpoint
 api.add_resource(ItemList, '/itemlist')
+api.add_resource(UserRegister, '/register')
 
 if __name__ == '__main__':
+    from mastore.db import db # avoid circular import
+    db.init_app(app)
     app.run(port=5000, debug=True)

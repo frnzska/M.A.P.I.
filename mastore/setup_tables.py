@@ -12,7 +12,7 @@ test_user=(1,'yo@mo.so','1234')
 cursor.execute(f"INSERT INTO users VALUES {test_user}")
 
 
-create_table = 'CREATE TABLE IF NOT EXISTS items (name text PRIMARY KEY, price real)'
+create_table = 'CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, name text, price real)'
 cursor.execute(create_table)
 
 connection.commit()

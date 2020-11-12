@@ -1,7 +1,13 @@
-import sqlite3
+from mastore.db import db
 
 
-class ItemModel():
+class ItemModel(db.Model):
+
+    __tablename__ = 'items'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    price = db.Float(db.Float(precision=2))
 
     def __init__(self, name, price):
         self.name = name
@@ -13,30 +19,14 @@ class ItemModel():
 
     @classmethod
     def find_by_name(cls, name):
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
-        query = """SELECT * FROM items WHERE name=?"""
-        result = cursor.execute(query, (name,))
-        row = result.fetchone()
-        conn.close()
-        return cls(*row) if row else None
+        results = cls.query.filter_by(name=name) # Query form db.Model, translates to select * from __tablename__ where name=name
+        return results.first()
 
 
-    def insert(self):
-        conn = sqlite3.connect('data.db')
-        cursor = conn.cursor()
-        query = 'INSERT INTO items VALUES(?, ?)'
-        cursor.execute(query, (self.name, self.price))
-        conn.commit()
-        conn.close()
-        return self
+    def save_to_db(self):
+        db.session.add(self) # session to collect objects to be eventually commited
+        db.session.commit()
 
 
-    def update(self):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = 'UPDATE items SET price=? WHERE name=?'
-        cursor.execute(query, (self.price, self.name))
-        connection.commit()
-        connection.close()
-        return self
+    def delete_from_db(self):
+        db.session.delete(self)

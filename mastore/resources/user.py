@@ -21,7 +21,8 @@ class UserRegister(Resource):
         if UserModel.find_by_email(data['email']):
             return {"message": "A user with that email already exists"}, 400
 
-        user = UserModel(data['email'], data['password'])
+
+        user = UserModel(email=data['email'], password=data['password'])
         user.save_to_db()
 
         return {"message": "User created successfully."}, 201
