@@ -25,6 +25,11 @@ jwt = JWT(app, authenticate, identity) # creates endpoint  and checks via authen
 # returns access_token which needs to be assinged in header if jwt_required for an endpoint, here: get
 # header: 'Authorisaton': 'JWT <the access token>'. BTW its the id stored in JWT token
 
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 api = Api(app)
 api.add_resource(Item, '/item/<name>') # name as param in methods at this endpoint
 api.add_resource(ItemList, '/itemlist')
