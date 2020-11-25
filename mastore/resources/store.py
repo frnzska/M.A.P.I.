@@ -34,4 +34,4 @@ class Store(Resource):
 class StoreList(Resource):
 
     def get(self):
-        pass
+        return {'stores': list(map(lambda x: x.json(), StoreModel.query.all()))}
