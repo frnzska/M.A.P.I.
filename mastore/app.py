@@ -1,3 +1,4 @@
+import os
 import datetime
 from flask import Flask
 from flask_restful import Api  # enforce REST principles
@@ -12,7 +13,7 @@ from mastore.resources.user import UserRegister
 app = Flask(__name__)
 app.secret_key = 'test' # for jwt exchange token
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(DATABASE_URL, 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # turns of flask sqlchemy modificatinon tracker, sql aclchemy tracker is there
 app.config['PROPAGATE_EXCEPTIONS'] = True
 
