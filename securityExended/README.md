@@ -1,0 +1,1 @@
+Using flask_jwt_extended and token for user authentication
