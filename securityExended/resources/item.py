@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required # change to extended
+from flask_jwt_extended import jwt_required, fresh_jwt_required
 from securityExended.models.item import ItemModel
 
 
@@ -13,7 +13,7 @@ class Item(Resource):
         return item.json() if item else None, 200 if item else 404 # return valid json representation
 
 
-    @jwt_required
+    @fresh_jwt_required
     def post(self, name):
         #eg.  server/item/fancy_hat -> post(name=fancy_hat)
         #price = request.get_json() # get request body, payload
@@ -26,7 +26,7 @@ class Item(Resource):
         return item.json(), 201
 
 
-    @jwt_required
+    @fresh_jwt_required
     def put(self, name):
         payload = self.parser.parse_args()
         item = ItemModel.find_by_name(name)
@@ -37,7 +37,7 @@ class Item(Resource):
         item.save_to_db()
         return item.json(), 201
 
-    @jwt_required
+    @fresh_jwt_required
     def delete(self, name):
         item = ItemModel.find_by_name(name=name)
         if item:
