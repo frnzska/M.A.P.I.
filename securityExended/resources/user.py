@@ -3,7 +3,11 @@ from werkzeug.security import safe_str_cmp
 from securityExended.models.user import UserModel
 from flask_jwt_extended import (
      create_access_token,
-     create_refresh_token)
+     create_refresh_token,
+     jwt_required,
+     get_raw_jwt
+)
+from securityExended.blacklist import BLACKLIST
 
 parser = reqparse.RequestParser()
 parser.add_argument('email',
@@ -44,3 +48,14 @@ class UserLogin(Resource):
         return {"message": "Invalid Credentials!"}, 401
 
 
+class UserLogout(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()['jti'] # jti is the id of the jwt token, to be excluded and forced to get a now one after logut
+        BLACKLIST.add(jti)
+        return {"message": "Successfully logged out"}, 200
+
+
+
+# refresh token: when access_token expired but still logged in, fine for non critical operations like browsing
+# for critical stuff (e.g. change password) again password should be asked to get a fresh token
