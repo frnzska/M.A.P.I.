@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Discourse</title>
+</head>
+<body>
+    <header class="mynavbar">
+        <div class="navbar__brand">
+            <img src="/static/img/girlOnBird.jpg" width="50" height="80" alt="Romance is a crime" class="navbar__logo"> Dialogue
+        </div>
+        <ul class="navbar__navigation">
+            <li class="navbar__navigation-item">
+                <a href="#" class="navbar__link">Recent</a>
+            </li>
+            <li class="navbar__navigation-item">
+                <a href="#" class="navbar__link">Calendar</a>
+            </li>
+        </ul>
+    </header>
+    <main class="main">
+        <section>
+            <h1>It is your turn now</h1>
+            <!-- <form class="form" action="/entry" method="POST">
+                use post method to endpoint /entry, leave action out, means on current endpoint
+            -->
+            <form class="form" method="POST">
+                <p class="form__input">
+                    <label for="entry" class="form__label"></label>
+                    <textarea name="content" id="entry" class="form__textarea" ></textarea>
+                    <button type="submit" class="form__submit">Submit</button>
+                </p>
+            </form>
+        </section>
+         <section>
+             <h1>History written</h1>
+             {% for entry in entries %}
+             <article class="entry">
+                 <div>
+                     <h2 class="entry__title"> {{ entry['content'] | truncate(20, true) }} </h2>
+                     <time class="entry__date" datetime="{{ entry['date'] }}"> {{ entry['date'] }}</time>
+                 </div>
+                 <p class="entry__content">
+                     {{ entry['content'] }}
+                 </p>
+             </article>
+             {% endfor %}
+         </section>
+    </main>
+    <footer class="footer">
+        <div class="footer__content">
+            <section class="left">
+                <a class="footer__item">Investors</a>
+                <a class="footer__item">Careers</a>
+            </section>
+            <section class="right">
+                <div class="footer__column">
+                    <a class="footer__item">About</a>
+                    <a class="footer__item">Service</a>
+                    <a class="footer__item">More Buzz</a>
+                </div>
+            </section>
+        </div>
+
+    </footer>
+</body>
+</html>
