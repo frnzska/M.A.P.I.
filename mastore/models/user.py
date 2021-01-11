@@ -5,7 +5,7 @@ from mastore.db import db
 
 
 class UserModel(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(100))
@@ -14,7 +14,6 @@ class UserModel(db.Model):
     def __init__(self, email, password):
         self.password = password
         self.email = email
-
 
     @classmethod
     def find_by_id(cls, id):
