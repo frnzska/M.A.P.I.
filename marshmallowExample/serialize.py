@@ -16,7 +16,7 @@ class Book:
         self.description = description
 
 
-b = Book(123, 'Deadly Martin', 'The End is near', 'World is going to end')
+b = Book(123, "Deadly Martin", "The End is near", "World is going to end")
 book_schema = BookSchema()
 
 b_dict = book_schema.dump(b)
