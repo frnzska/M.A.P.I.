@@ -31,7 +31,7 @@ class UserModel(db.Model):
         return cls.query.filter_by(id=_id).first()
 
     def send_confirmation_email(self) -> Response:
-        link = request.url_root[0:1] # https://127.0.0.1:5000
+        link = request.url_root[:-1] # http://127.0.0.1:5000
         link += url_for('userconfirmed', user_id = self.id) # userconfirmed from Resource UserConfirmed, gets endpoint,
         ## e.g. calculates https://127.0.0.1:5000/confirmed/1'
         return post(
